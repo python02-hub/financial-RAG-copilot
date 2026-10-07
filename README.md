@@ -65,7 +65,7 @@ The web app is a single self-contained HTML file — no build step needed to *us
 For real embeddings, bulk ingestion, and offline use.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git clone https://github.com/python02-hub/financial-RAG-copilot.git
 cd YOUR_REPO
 python3 -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
