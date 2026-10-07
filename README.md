@@ -5,7 +5,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](requirements.txt)
 [![Built with Claude](https://img.shields.io/badge/LLM-Claude-6b5bd2)](https://www.anthropic.com)
 
-**[→ Live demo (GitHub Pages)](https://python02-hub.github.io/financial-RAG-copilot/)** — replace with your own link after enabling Pages (see [Deploying the web demo](#deploying-the-web-demo)).
+**[Live demo (GitHub Pages)](https://python02-hub.github.io/financial-RAG-copilot/)**
 
 ---
 
@@ -34,7 +34,6 @@ There are two ways to use it, both built from the same core pipeline:
 - [Quickstart: Python backend](#quickstart-python-backend)
 - [Architecture](#architecture)
 - [Repository structure](#repository-structure)
-- [Deploying the web demo](#deploying-the-web-demo)
 - [Security notes](#security-notes)
 - [Extending this project](#extending-this-project)
 - [Contributing](#contributing)
@@ -48,7 +47,7 @@ The fastest way to try it — no install required.
 
 1. Open [`docs/index.html`](docs/index.html) via the [live demo link](#) above, **or** clone this repo and serve it locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+   git clone https://github.com/python02-hub/financial-RAG-copilot.git
    cd YOUR_REPO
    python3 -m http.server 8000
    # open http://localhost:8000/docs/
@@ -140,14 +139,6 @@ The standalone web app (`web/template.html` → `docs/index.html`) mirrors this 
 ```bash
 python web/build.py
 ```
-
-## Deploying the web demo
-
-1. Push this repo to GitHub.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to `Deploy from a branch`, branch `main`, folder `/docs`.
-4. Your live demo will be at `https://YOUR_USERNAME.github.io/YOUR_REPO/` within a minute or two.
-5. Update the live-demo link at the top of this README.
 
 ## Security notes
 
