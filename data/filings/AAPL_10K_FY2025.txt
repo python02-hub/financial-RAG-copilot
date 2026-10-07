@@ -1,0 +1,187 @@
+SOURCE: SEC EDGAR — https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm
+FILING: Apple Inc. Form 10-K, Fiscal Year Ended September 27, 2025
+CIK: 0000320193
+
+UNITED STATES
+SECURITIES AND EXCHANGE COMMISSION
+Washington, D.C. 20549
+
+FORM 10-K
+
+ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the fiscal year ended September 27, 2025
+Commission File Number: 001-36743
+
+Apple Inc.
+Entity Incorporation State: California
+Entity Address: One Apple Park Way, Cupertino, California 95014
+Trading Symbol: AAPL, The Nasdaq Stock Market LLC
+14,776,353,000 shares of common stock were issued and outstanding as of October 17, 2025.
+The aggregate market value of the voting and non-voting stock held by non-affiliates of the Registrant, as of March 28, 2025, was approximately $3,253,431,000,000.
+
+PART I
+
+Item 1. Business
+
+Company Background
+The Company designs, manufactures and markets smartphones, personal computers, tablets, wearables and accessories, and sells a variety of related services. The Company's fiscal year is the 52- or 53-week period that ends on the last Saturday of September.
+
+Products
+iPhone is the Company's line of smartphones based on its iOS operating system. The iPhone line includes iPhone 17 Pro, iPhone Air, iPhone 17, iPhone 16 and iPhone 16e.
+Mac is the Company's line of personal computers based on its macOS operating system. The Mac line includes laptops MacBook Air and MacBook Pro, as well as desktops iMac, Mac mini, Mac Studio and Mac Pro.
+iPad is the Company's line of multipurpose tablets based on its iPadOS operating system. The iPad line includes iPad Pro, iPad Air, iPad and iPad mini.
+Wearables includes smartwatches, wireless headphones and spatial computers, including Apple Watch Series 11, Apple Watch SE 3, Apple Watch Ultra 3, AirPods, AirPods Pro, AirPods Max, Beats products, and Apple Vision Pro.
+Home includes Apple TV 4K, HomePod and HomePod mini.
+
+Services
+Advertising, AppleCare, Cloud Services, Digital Content (App Store, Apple Arcade, Apple Fitness+, Apple Music, Apple News+, Apple TV), and Payment Services (Apple Card, Apple Pay).
+
+Segments
+The Company manages its business primarily on a geographic basis: Americas, Europe, Greater China, Japan and Rest of Asia Pacific. During 2025, the Company's net sales through its direct and indirect distribution channels accounted for 40% and 60%, respectively, of total net sales.
+
+Human Capital
+As of September 27, 2025, the Company had approximately 166,000 full-time equivalent employees.
+
+Item 1A. Risk Factors
+
+The following summarizes factors that could have a material adverse effect on the Company's business, reputation, results of operations, financial condition and stock price. The Company may not be able to accurately predict, control or mitigate these risks.
+
+Macroeconomic and Industry Risks
+
+The Company's operations and performance depend significantly on global and regional economic conditions and adverse economic conditions can materially adversely affect the Company's business, results of operations, financial condition and stock price. The Company has international operations with sales outside the U.S. representing a majority of the Company's total net sales. Adverse macroeconomic conditions, including slow growth or recession, high unemployment, inflation, tighter credit, higher interest rates, and currency fluctuations, can adversely impact consumer confidence and spending.
+
+The Company's business can be impacted by political events, trade and other international disputes, geopolitical tensions, conflict, terrorism, natural disasters, public health issues, industrial accidents and other business interruptions. A significant majority of the Company's manufacturing is performed in whole or in part by outsourcing partners located primarily in China mainland, India, Japan, South Korea, Taiwan and Vietnam. Beginning in the second quarter of 2025, new tariffs were announced on imports to the U.S. ("U.S. Tariffs"), including additional tariffs on imports from China, India, Japan, South Korea, Taiwan, Vietnam and the European Union ("EU"), among others. In response, several countries have imposed, or threatened to impose, reciprocal tariffs on imports from the U.S. and other retaliatory measures. The U.S. Department of Commerce has initiated an investigation under Section 232 of the Trade Expansion Act of 1962 into imports of semiconductors, semiconductor manufacturing equipment, and their derivative products.
+
+Global markets for the Company's products and services are highly competitive and subject to rapid technological change, and the Company may be unable to compete effectively in these markets. The Company has a minority market share in the global smartphone, personal computer, tablet and wearables markets.
+
+Business Risks
+
+To remain competitive and stimulate customer demand, the Company must successfully manage frequent introductions and transitions of products and services. The Company depends on component and product manufacturing and logistical services provided by outsourcing partners, many of which are located outside of the U.S. The Company relies on single-source partners in the U.S., Asia and Europe to supply and manufacture many components, and on partners primarily located in Asia, for final assembly of substantially all of the Company's hardware products.
+
+Future operating results depend upon the Company's ability to obtain components in sufficient quantities on commercially reasonable terms. Because the Company currently obtains certain components from single or limited sources, the Company is subject to significant supply and pricing risks.
+
+The introduction of new and complex technologies, such as artificial intelligence features, can increase safety risks, including exposing users to harmful, inaccurate or other negative content and experiences. This risk may be exacerbated by the use of new and emerging technologies, including machine learning and artificial intelligence, which can involve the acquisition and use of copyrighted materials for training as well as the potential reproduction of copyrighted materials in outputs.
+
+The Company's success depends largely on the talents and efforts of its team members, the continued service and availability of highly skilled employees, including key personnel, and the Company's ability to nurture its distinctive and inclusive culture. Experienced personnel in the technology industry are in high demand and competition for their talents is intense, especially in Silicon Valley.
+
+The Company's business and reputation are impacted by information technology system failures and network disruptions. The Company experiences malicious attacks and other attempts to gain unauthorized access to its systems on a regular basis. Attacks are expected to continue accelerating in both frequency and sophistication.
+
+Losses or unauthorized access to or releases of confidential information, including personal information, could subject the Company to significant reputational, financial, legal and operational consequences.
+
+Legal and Regulatory Compliance Risks
+
+The Company's business, results of operations and financial condition could be adversely impacted by unfavorable results of legal proceedings or government investigations. The Company has faced and continues to face a significant number of patent claims relating to its standards-enabled products.
+
+The Company is subject to complex and changing laws and regulations worldwide on subjects including antitrust; privacy, data security and data localization; online safety; age verification; consumer protection; digital platforms; and machine learning and artificial intelligence, among many others.
+
+The technology industry, including, in some instances, the Company, is subject to intense media, political and regulatory scrutiny, which exposes the Company to increasing regulation, government investigations, legal actions and penalties. The Company has implemented changes to iOS, iPadOS, the App Store and Safari in the EU as it seeks to comply with the Digital Markets Act ("DMA"). The Company is currently subject to a court order preventing it from imposing any commission or fee on certain purchases that consumers make. The Company is also currently subject to antitrust investigations and litigation in various jurisdictions, including civil antitrust lawsuits in the U.S. alleging monopolization or attempted monopolization in the markets for "performance smartphones" and "smartphones."
+
+The Company's business is subject to a variety of U.S. and international laws, rules, policies and other obligations regarding the collection, use, protection and transfer of personal data.
+
+Financial Risks
+
+The Company's net sales and gross margins are subject to volatility and downward pressure due to a variety of factors, including continued industry-wide global product pricing pressures, increased competition, supply shortages, fluctuations in foreign exchange rates, inflation and other macroeconomic pressures, and the imposition of new or increased tariffs and other trade restrictions.
+
+The Company's financial performance is subject to risks associated with changes in the value of the U.S. dollar relative to local currencies. The Company is exposed to credit risk and fluctuations in the values of its investment portfolio. The Company is subject to changes in tax rates, the adoption of new U.S. or international tax legislation and exposure to additional tax liabilities.
+
+General Risks
+
+The price of the Company's stock is subject to volatility. The Company's stock has experienced substantial price volatility in the past and may continue to do so in the future.
+
+Item 1C. Cybersecurity
+
+The Company's management, led by its Head of Corporate Information Security, has overall responsibility for identifying, assessing and managing any material risks from cybersecurity threats. The Audit Committee assists the Board in the oversight and monitoring of cybersecurity matters.
+
+Item 3. Legal Proceedings
+
+Digital Markets Act Investigations: On March 25, 2024, the European Commission announced a formal noncompliance investigation against the Company under Article 5(4) of the EU DMA. On June 24, 2024, the Commission opened an additional investigation regarding whether the Company's contractual requirements for third-party app developers may violate the DMA. On April 23, 2025, the Commission fined the Company EUR 500 million in the Article 5(4) Investigation and issued a cease and desist order. The Company has appealed the Commission's decision.
+
+Department of Justice Lawsuit: On March 21, 2024, the DOJ and state attorneys general filed a civil antitrust lawsuit against the Company alleging monopolization in the markets for "performance smartphones" and "smartphones" in violation of U.S. antitrust laws.
+
+Epic Games: On April 30, 2025, the California District Court found the Company to be in violation of a 2021 injunction and enjoined the Company from imposing any commission or fee on purchases made outside an app. The court referred the Company to the U.S. Attorney for a determination of whether criminal contempt proceedings are appropriate. The Company has appealed to the Ninth Circuit Court, with oral arguments heard in October 2025.
+
+PART II
+
+Item 5. Market for Registrant's Common Equity
+
+Company Stock Performance (5-year cumulative total shareholder return, $100 invested Sept 25, 2020):
+Year | Apple Inc. | S&P 500 Index | Dow Jones U.S. Technology Index
+Sept 2020 | $100 | $100 | $100
+Sept 2021 | $132 | $137 | $147
+Sept 2022 | $136 | $115 | $107
+Sept 2023 | $155 | $136 | $147
+Sept 2024 | $208 | $185 | $220
+Sept 2025 | $234 | $217 | $287
+
+Share Repurchases (Q4 FY2025, three months ended September 27, 2025):
+Period | Shares Purchased (thousands) | Avg Price Paid Per Share | Dollar Value Remaining
+Jun 29 - Aug 2, 2025 | 33,265 | $210.43 |
+Aug 3 - Aug 30, 2025 | 28,986 | $224.25 |
+Aug 31 - Sep 27, 2025 | 27,247 | $238.56 |
+Total | 89,498 | | $99,779 million
+
+Item 7. Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+Fiscal Period: Fiscal years 2025 and 2024 spanned 52 weeks each; fiscal year 2023 spanned 53 weeks.
+
+Tariffs and Other Measures: Beginning in the second quarter of 2025, new U.S. Tariffs were announced, including additional tariffs on imports from China, India, Japan, South Korea, Taiwan, Vietnam and the EU. Tariffs and other measures applied to the Company's products or components can have a material adverse impact on the Company's business, results of operations and financial condition, including impacting supply chain, availability of rare earths and other raw materials, pricing and gross margin.
+
+Segment Operating Performance — Net sales by reportable segment ($ millions):
+Segment | 2025 | Change YoY | 2024 | Change YoY | 2023
+Americas | 178,353 | +7% | 167,045 | +3% | 162,560
+Europe | 111,032 | +10% | 101,328 | +7% | 94,294
+Greater China | 64,377 | -4% | 66,952 | -8% | 72,559
+Japan | 28,703 | +15% | 25,052 | +3% | 24,257
+Rest of Asia Pacific | 33,696 | +10% | 30,658 | +4% | 29,615
+Total net sales | 416,161 | +6% | 391,035 | +2% | 383,285
+
+Products and Services Performance — Net sales by category ($ millions):
+Category | 2025 | Change YoY | 2024 | Change YoY | 2023
+iPhone | 209,586 | +4% | 201,183 | 0% | 200,583
+Mac | 33,708 | +12% | 29,984 | +2% | 29,357
+iPad | 28,023 | +5% | 26,694 | -6% | 28,300
+Wearables, Home and Accessories | 35,686 | -4% | 37,005 | -7% | 39,845
+Services | 109,158 | +14% | 96,169 | +13% | 85,200
+Total net sales | 416,161 | +6% | 391,035 | +2% | 383,285
+
+Gross Margin ($ millions and %):
+Category | 2025 | 2024 | 2023
+Products gross margin | 112,887 | 109,633 | 108,803
+Services gross margin | 82,314 | 71,050 | 60,345
+Total gross margin | 195,201 | 180,683 | 169,148
+Products gross margin % | 36.8% | 37.2% | 36.5%
+Services gross margin % | 75.4% | 73.9% | 70.8%
+Total gross margin % | 46.9% | 46.2% | 44.1%
+
+Products gross margin increased during 2025 compared to 2024 primarily due to favorable costs and a different mix of products, partially offset by tariff costs. Products gross margin percentage decreased during 2025 compared to 2024 primarily due to a different mix of products and tariff costs.
+
+Operating Expenses ($ millions):
+Category | 2025 | Change | 2024 | Change | 2023
+Research and development | 34,550 | +10% | 31,370 | +5% | 29,915
+% of total net sales | 8% | | 8% | | 8%
+Selling, general and administrative | 27,601 | +6% | 26,097 | +5% | 24,932
+% of total net sales | 7% | | 7% | | 7%
+Total operating expenses | 62,151 | +8% | 57,467 | +5% | 54,847
+% of total net sales | 15% | | 15% | | 14%
+
+Provision for Income Taxes ($ millions):
+Metric | 2025 | 2024 | 2023
+Provision for income taxes | 20,719 | 29,749 | 16,741
+Effective tax rate | 15.6% | 24.1% | 14.7%
+Statutory federal income tax rate | 21% | 21% | 21%
+
+The Company's effective tax rate for 2025 was lower than the statutory federal rate primarily due to a lower effective tax rate on foreign earnings, the impact of the U.S. federal R&D credit, and tax benefits from share-based compensation, partially offset by a change in valuation allowance and state income taxes. The effective tax rate for 2025 was lower compared to 2024 due to a $10.7 billion year-over-year decrease in the provision for income taxes related to the State Aid Decision.
+
+Liquidity and Capital Resources: The Company's balances of cash, cash equivalents and marketable securities totaled $132.4 billion as of September 27, 2025.
+
+Debt: As of September 27, 2025, the Company had outstanding fixed-rate notes with an aggregate principal amount of $91.3 billion, with $12.4 billion payable within 12 months. The Company had $8.0 billion of commercial paper outstanding.
+
+Leases: Fixed lease payment obligations of $16.8 billion, with $2.6 billion payable within 12 months.
+
+Manufacturing Purchase Obligations: $56.2 billion, with $55.4 billion payable within 12 months.
+
+Other Purchase Obligations: $14.8 billion, with $7.0 billion payable within 12 months.
+
+Capital Return Program: On May 2, 2024, the Company announced a program to repurchase up to $110 billion of common stock; the program was fully utilized during Q4 FY2025. On May 1, 2025, the Company announced an additional program to repurchase up to $100 billion of common stock; as of September 27, 2025, $221 million had been utilized.
+
+--- END OF EXCERPT (Business, Risk Factors, Cybersecurity, Legal Proceedings, Market for Common Equity, and MD&A sections). Full filing available at the SEC EDGAR source URL above. ---

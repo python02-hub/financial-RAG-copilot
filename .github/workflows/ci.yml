@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  python-compile:
+    name: Python syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile all Python sources
+        run: python -m py_compile src/*.py cli.py app.py web/build.py
+
+  web-build-check:
+    name: Web app build is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install build dependency (pandas only — no heavy ML deps needed for this build)
+        run: pip install pandas
+      - name: Regenerate docs/index.html
+        run: python web/build.py
+      - name: Fail if docs/index.html is out of date
+        run: |
+          if ! git diff --quiet -- docs/index.html; then
+            echo "::error::docs/index.html is out of date. Run 'python web/build.py' locally and commit the result."
+            git diff --stat -- docs/index.html
+            exit 1
+          fi
+
+  web-js-syntax:
+    name: Web app JavaScript syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract and check embedded <script> block
+        run: |
+          python3 -c "
+          import re
+          html = open('docs/index.html').read()
+          scripts = re.findall(r'<script>(.*?)</script>', html, re.DOTALL)
+          assert scripts, 'No inline <script> block found in docs/index.html'
+          open('/tmp/extracted.js', 'w').write(scripts[-1])
+          "
+          node --check /tmp/extracted.js

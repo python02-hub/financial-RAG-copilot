@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial RAG Copilot — AAPL FY2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{
+    --bg:#111813;
+    --panel:#161F19;
+    --panel-2:#1B251E;
+    --line:#2A362D;
+    --gold:#C9A227;
+    --gold-dim:#8A742A;
+    --sage:#7A9B7E;
+    --brick:#B5533C;
+    --ink:#EDEAE0;
+    --ink-muted:#93998F;
+    --ink-faint:#5E6960;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    display:flex;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold-dim);color:var(--ink);}
+
+  /* ---------- Nav rail ---------- */
+  nav{
+    width:220px;
+    flex-shrink:0;
+    border-right:1px solid var(--line);
+    padding:28px 0 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .brand{padding:0 22px 22px; border-bottom:1px solid var(--line); margin-bottom:18px;}
+  .brand .mark{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.12em;
+    color:var(--gold); margin-bottom:6px;
+  }
+  .brand h1{
+    font-family:var(--serif); font-weight:500; font-size:19px; line-height:1.25;
+    margin:0; color:var(--ink);
+  }
+  .navlist{display:flex; flex-direction:column; padding:0 10px;}
+  .navlist button{
+    all:unset; cursor:pointer;
+    padding:10px 12px; margin-bottom:2px; border-radius:3px;
+    font-size:13.5px; color:var(--ink-muted);
+    display:flex; align-items:center; gap:9px;
+    transition:background 0.15s, color 0.15s;
+  }
+  .navlist button .num{font-family:var(--mono); font-size:11px; color:var(--ink-faint); width:14px;}
+  .navlist button:hover{background:var(--panel); color:var(--ink);}
+  .navlist button.active{background:var(--panel-2); color:var(--ink); border-left:2px solid var(--gold); padding-left:10px;}
+  .navlist button.active .num{color:var(--gold);}
+
+  .nav-foot{padding:0 22px; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); line-height:1.7;}
+  .nav-foot .dot{color:var(--sage);}
+
+  .api-settings{padding:16px 22px 4px; border-top:1px solid var(--line); margin-top:14px;}
+  .api-settings-label{font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-bottom:8px; letter-spacing:0.03em;}
+  .api-settings-label #modeIndicator.ok{color:var(--sage);}
+  .api-settings-label #modeIndicator.needs-key{color:var(--gold);}
+  .api-settings input{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    color:var(--ink); font-family:var(--mono); font-size:11.5px; padding:7px 9px;
+  }
+  .api-settings input:focus{outline:none; border-color:var(--gold-dim);}
+  .api-settings-hint{font-size:10px; color:var(--ink-faint); margin-top:6px; line-height:1.5;}
+
+  /* ---------- Main ---------- */
+  main{flex:1; overflow-y:auto; padding:36px 48px 60px;}
+  .container{max-width:760px;}
+
+  .page-head{margin-bottom:28px;}
+  .ticker-row{display:flex; align-items:baseline; gap:12px; margin-bottom:4px;}
+  .ticker-badge{
+    font-family:var(--mono); font-size:12px; color:var(--bg); background:var(--gold);
+    padding:2px 7px; border-radius:2px; font-weight:600; letter-spacing:0.03em;
+  }
+  .page-head h2{font-family:var(--serif); font-size:26px; font-weight:500; margin:0; color:var(--ink);}
+  .page-head p.sub{color:var(--ink-muted); font-size:14px; margin:8px 0 0; line-height:1.6; max-width:60ch;}
+
+  hr.rule{border:none; border-top:1px solid var(--line); margin:22px 0;}
+
+  /* ---------- Ask tab ---------- */
+  .ask-box{position:relative;}
+  textarea#question{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    color:var(--ink); font-family:var(--sans); font-size:14.5px; padding:14px 16px;
+    resize:vertical; min-height:64px; line-height:1.5;
+  }
+  textarea#question:focus{outline:none; border-color:var(--gold-dim);}
+  .ask-controls{display:flex; align-items:center; justify-content:space-between; margin-top:10px;}
+  .chip-row{display:flex; gap:6px; flex-wrap:wrap;}
+  .chip{
+    font-family:var(--mono); font-size:11px; color:var(--ink-muted);
+    border:1px solid var(--line); padding:4px 9px; border-radius:12px; cursor:pointer;
+    transition:border-color 0.15s, color 0.15s;
+  }
+  .chip:hover{border-color:var(--gold-dim); color:var(--ink);}
+  button.primary{
+    all:unset; cursor:pointer; font-family:var(--sans); font-size:13.5px; font-weight:600;
+    background:var(--gold); color:#161207; padding:9px 18px; border-radius:3px;
+    transition:background 0.15s;
+  }
+  button.primary:hover{background:#DDB53C;}
+  button.primary:disabled{background:var(--ink-faint); color:var(--panel); cursor:default;}
+
+  .answer-block{margin-top:26px;}
+  .mode-tag{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; color:var(--ink-faint);
+    text-transform:uppercase; margin-bottom:10px; display:inline-block;
+  }
+  .answer-text{font-size:15px; line-height:1.75; color:var(--ink); white-space:pre-wrap;}
+  .answer-text .cite{color:var(--gold); font-family:var(--mono); font-size:12.5px;}
+
+  .sources{margin-top:22px;}
+  .sources h4{font-family:var(--sans); font-size:11.5px; letter-spacing:0.06em; color:var(--ink-faint); text-transform:uppercase; margin:0 0 10px; font-weight:600;}
+  .source-item{
+    border-left:2px solid var(--line); padding:4px 0 4px 14px; margin-bottom:14px;
+  }
+  .source-item .src-head{font-family:var(--mono); font-size:11px; color:var(--sage); margin-bottom:4px;}
+  .source-item .src-body{font-size:12.5px; color:var(--ink-muted); line-height:1.55;}
+
+  .loading{color:var(--ink-faint); font-family:var(--mono); font-size:13px;}
+  .loading::after{content:''; animation:dots 1.4s infinite;}
+  @keyframes dots{0%{content:'.'} 33%{content:'..'} 66%{content:'...'}}
+
+  /* ---------- Metrics tab ---------- */
+  .metrics-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:20px;}
+  .metric-cell{background:var(--panel); padding:18px 20px;}
+  .metric-cell .label{font-family:var(--sans); font-size:11.5px; color:var(--ink-muted); margin-bottom:6px;}
+  .metric-cell .value{font-family:var(--mono); font-size:22px; color:var(--ink); font-weight:500;}
+  .metric-cell .value .unit{font-size:13px; color:var(--ink-faint); margin-left:3px;}
+
+  .bar-chart{margin-top:32px;}
+  .bar-row{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .bar-label{width:150px; font-size:12.5px; color:var(--ink-muted); text-align:right; flex-shrink:0;}
+  .bar-track{flex:1; background:var(--panel); height:22px; position:relative; border-radius:2px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg, var(--gold-dim), var(--gold));}
+  .bar-val{width:90px; font-family:var(--mono); font-size:12px; color:var(--ink);}
+
+  /* ---------- Price tab ---------- */
+  #priceChart{width:100%; height:220px; display:block; margin-top:20px;}
+  .events-table{width:100%; border-collapse:collapse; margin-top:24px; font-size:13px;}
+  .events-table th{text-align:left; font-family:var(--sans); font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.04em; border-bottom:1px solid var(--line); padding:8px 10px 8px 0; font-weight:600;}
+  .events-table td{padding:12px 10px 12px 0; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-muted);}
+  .events-table td.event-name{color:var(--ink); max-width:260px;}
+  .events-table td.pct{font-family:var(--mono);}
+  .pct.pos{color:var(--sage);}
+  .pct.neg{color:var(--brick);}
+
+  .custom-event{margin-top:32px; padding-top:24px; border-top:1px solid var(--line);}
+  .form-row{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap;}
+  .form-field{flex:1; min-width:160px;}
+  .form-field label{display:block; font-size:11px; color:var(--ink-faint); margin-bottom:5px; font-family:var(--sans);}
+  .form-field input, .form-field select{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    color:var(--ink); font-family:var(--mono); font-size:13px; padding:8px 10px;
+  }
+  .form-field input:focus, .form-field select:focus{outline:none; border-color:var(--gold-dim);}
+  #customResult{margin-top:18px; font-family:var(--mono); font-size:13px; color:var(--ink-muted); line-height:1.9;}
+  #customResult .k{color:var(--ink-faint);}
+  #customResult .v{color:var(--ink);}
+
+  .footnote{font-size:12px; color:var(--ink-faint); margin-top:36px; line-height:1.6; padding-top:16px; border-top:1px solid var(--line);}
+  .footnote a{color:var(--sage);}
+
+  /* ---------- Upload tab ---------- */
+  .upload-zone{
+    border:1px dashed var(--line); border-radius:4px; padding:28px 24px;
+    text-align:center; margin-top:20px; transition:border-color 0.15s, background 0.15s;
+    cursor:pointer;
+  }
+  .upload-zone.dragover{border-color:var(--gold); background:var(--panel);}
+  .upload-zone .icon{font-family:var(--mono); font-size:22px; color:var(--gold-dim); margin-bottom:8px;}
+  .upload-zone .main-txt{font-size:14px; color:var(--ink);}
+  .upload-zone .sub-txt{font-size:12px; color:var(--ink-faint); margin-top:4px;}
+  .upload-zone input[type=file]{display:none;}
+
+  .meta-form{margin-top:20px;}
+  .meta-form .form-row{margin-top:0;}
+
+  .status-line{
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-muted);
+    margin-top:16px; line-height:1.8; white-space:pre-wrap;
+  }
+  .status-line.ok{color:var(--sage);}
+  .status-line.err{color:var(--brick);}
+
+  .section-preview{margin-top:18px;}
+  .section-preview .stag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; color:var(--ink-muted);
+    border:1px solid var(--line); border-radius:10px; padding:3px 9px; margin:0 6px 6px 0;
+  }
+
+  .dataset-banner{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    padding:10px 16px; margin-bottom:24px; font-size:12.5px;
+  }
+  .dataset-banner .left{color:var(--ink-muted);}
+  .dataset-banner .left b{color:var(--gold); font-family:var(--mono); font-weight:500;}
+  .dataset-banner button{
+    all:unset; cursor:pointer; font-family:var(--sans); font-size:11.5px; color:var(--ink-faint);
+    border:1px solid var(--line); padding:5px 10px; border-radius:3px;
+  }
+  .dataset-banner button:hover{color:var(--ink); border-color:var(--gold-dim);}
+
+  .reaction-card{
+    border-left:2px solid var(--gold-dim); padding:8px 0 8px 14px; margin-top:16px;
+  }
+  .reaction-card .r-date{font-family:var(--mono); font-size:11px; color:var(--gold); margin-bottom:3px;}
+  .reaction-card .r-desc{font-size:13.5px; color:var(--ink); line-height:1.6;}
+  .reaction-card .r-src{font-size:11.5px; color:var(--ink-faint); margin-top:4px;}
+  .reaction-card .r-src a{color:var(--sage); text-decoration:none;}
+  .reaction-card .r-src a:hover{text-decoration:underline;}
+
+  ::-webkit-scrollbar{width:9px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--line); border-radius:5px;}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block; animation:fadein 0.25s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div>
+    <div class="brand">
+      <div class="mark">FINANCIAL RAG COPILOT</div>
+      <h1>Equity Research Terminal</h1>
+    </div>
+    <div class="navlist">
+      <button data-tab="upload"><span class="num">00</span>Upload Data</button>
+      <button class="active" data-tab="ask"><span class="num">01</span>Ask the Filing</button>
+      <button data-tab="metrics"><span class="num">02</span>Key Metrics</button>
+      <button data-tab="price"><span class="num">03</span>Price Reaction</button>
+    </div>
+  </div>
+  <div class="nav-foot" id="navFoot">
+    <span class="dot">●</span> AAPL · 10-K · FY2025<br>
+    Source: SEC EDGAR<br>
+    22 chunks indexed
+  </div>
+
+  <div class="api-settings">
+    <div class="api-settings-label">
+      <span id="modeIndicator">● checking environment…</span>
+    </div>
+    <input type="password" id="apiKeyInput" placeholder="Anthropic API key (sk-ant-...)">
+    <div class="api-settings-hint" id="apiKeyHint">Only needed if this page isn't running inside Claude.ai.</div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <!-- ============ TAB 0: UPLOAD / SEARCH ============ -->
+    <section class="tab-panel" id="tab-upload">
+      <div class="page-head">
+        <h2>Get data into the copilot</h2>
+        <p class="sub">Search live for any public company's filing, or upload your own PDF/text — every tab switches to that data. Live search uses Claude's web search to find and read the actual filing on SEC EDGAR; nothing is invented.</p>
+      </div>
+
+      <div class="status-line" style="background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:12px 14px; margin-bottom:24px;">
+        Running this file outside Claude.ai? Open it via a local server (e.g. <code>python3 -m http.server</code>, not double-click) and paste an Anthropic API key in the sidebar on the left — that's required for Ask and Live Search to work standalone.
+      </div>
+
+      <div class="page-head" style="margin-bottom:8px;">
+        <h2 style="font-size:16px;">Search live</h2>
+      </div>
+      <div class="meta-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Company or ticker</label>
+            <input type="text" id="liveCompany" placeholder="e.g. Microsoft or MSFT">
+          </div>
+          <div class="form-field">
+            <label>Filing type</label>
+            <select id="liveFilingType">
+              <option value="10-K">10-K (annual)</option>
+              <option value="10-Q">10-Q (quarterly)</option>
+              <option value="8-K">8-K (current report)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Fiscal year / period</label>
+            <input type="text" id="liveFiscalYear" placeholder="e.g. 2025 or Q2 2025">
+          </div>
+        </div>
+        <button class="primary" id="liveSearchBtn" style="margin-top:16px;">Search &amp; fetch live →</button>
+      </div>
+      <div class="status-line" id="liveStatus"></div>
+      <div class="section-preview" id="liveSectionPreview"></div>
+
+      <hr class="rule">
+
+      <div class="page-head" style="margin-bottom:8px;">
+        <h2 style="font-size:16px;">Or upload a file</h2>
+        <p class="sub" style="margin-top:6px;">A 10-K, 10-Q, or transcript (PDF or plain text) — parsed and indexed entirely in your browser.</p>
+      </div>
+
+      <div class="upload-zone" id="dropZone">
+        <div class="icon">↑</div>
+        <div class="main-txt">Click to choose a file, or drag one here</div>
+        <div class="sub-txt">.pdf or .txt — 10-K, 10-Q, 8-K, or earnings call transcript</div>
+        <input type="file" id="fileInput" accept=".pdf,.txt">
+      </div>
+
+      <div class="meta-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Ticker / company</label>
+            <input type="text" id="metaCompany" placeholder="e.g. MSFT" value="">
+          </div>
+          <div class="form-field">
+            <label>Filing type</label>
+            <input type="text" id="metaFilingType" placeholder="10-K" value="10-K">
+          </div>
+          <div class="form-field">
+            <label>Fiscal year</label>
+            <input type="text" id="metaFiscalYear" placeholder="2025" value="">
+          </div>
+        </div>
+        <button class="primary" id="processBtn" style="margin-top:16px;">Process filing →</button>
+      </div>
+
+      <div class="status-line" id="uploadStatus"></div>
+      <div class="section-preview" id="sectionPreview"></div>
+
+      <hr class="rule">
+
+      <div class="page-head" style="margin-bottom:8px;">
+        <h2 style="font-size:17px;">Price data (optional)</h2>
+        <p class="sub" style="margin-top:6px;">CSV with columns: date,open,high,low,close,volume — needed for the Price Reaction tab if you've uploaded a filing for a different company than the bundled AAPL sample.</p>
+      </div>
+      <div class="upload-zone" id="csvDropZone" style="padding:18px;">
+        <div class="main-txt" style="font-size:13px;">Click to choose a CSV, or drag one here</div>
+        <input type="file" id="csvInput" accept=".csv">
+      </div>
+      <div class="status-line" id="csvStatus"></div>
+
+      <hr class="rule">
+      <button class="primary" id="resetBtn" style="background:transparent; border:1px solid var(--line); color:var(--ink-muted);">Reset to sample AAPL data</button>
+    </section>
+
+    <!-- ============ TAB 1: ASK ============ -->
+    <section class="tab-panel active" id="tab-ask">
+      <div class="page-head">
+        <div class="dataset-banner" id="banner-ask"></div>
+        <h2>Ask the filing</h2>
+        <p class="sub" id="askSub">Grounded retrieval over Apple's actual FY2025 10-K, filed with the SEC. Every answer cites the exact section it came from.</p>
+      </div>
+
+      <div class="ask-box">
+        <textarea id="question" placeholder="e.g. What did Apple say about tariff risk and its supply chain?"></textarea>
+        <div class="ask-controls">
+          <div class="chip-row">
+            <span class="chip" data-q="What did Apple say about tariff risk and its supply chain?">Tariff risk</span>
+            <span class="chip" data-q="What is the status of the DOJ antitrust lawsuit against Apple?">DOJ lawsuit</span>
+            <span class="chip" data-q="How did gross margin change in FY2025 and why?">Gross margin</span>
+            <span class="chip" data-q="What did Apple say about AI-related risks?">AI risk</span>
+          </div>
+          <button class="primary" id="askBtn">Ask →</button>
+        </div>
+      </div>
+
+      <div class="answer-block" id="answerBlock" style="display:none;">
+        <span class="mode-tag" id="modeTag"></span>
+        <div class="answer-text" id="answerText"></div>
+        <div class="sources" id="sourcesBlock"></div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 2: METRICS ============ -->
+    <section class="tab-panel" id="tab-metrics">
+      <div class="page-head">
+        <div class="dataset-banner" id="banner-metrics"></div>
+        <h2 id="metricsTitle">Key metrics, FY2025</h2>
+        <p class="sub">Extracted directly from the filing's MD&amp;A tables via structured parsing — not estimates. Fields that can't be found in your document are shown as —.</p>
+      </div>
+      <div class="metrics-grid" id="metricsGrid"></div>
+      <div class="bar-chart" id="barChart"></div>
+    </section>
+
+    <!-- ============ TAB 3: PRICE REACTION ============ -->
+    <section class="tab-panel" id="tab-price">
+      <div class="page-head">
+        <div class="dataset-banner" id="banner-price"></div>
+        <h2>Price reaction to disclosed events</h2>
+        <p class="sub" id="priceSub">Real AAPL daily closes, Aug 27 – Sep 30, 2025, linking the 10-K's own risk language (frequent product transitions) to what the market actually did.</p>
+      </div>
+      <svg id="priceChart" viewBox="0 0 700 220"></svg>
+      <table class="events-table" id="eventsTable">
+        <thead><tr><th>Event</th><th>Window</th><th>Change</th><th>Max drawdown</th><th>Peak volume</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="custom-event">
+        <div class="page-head" style="margin-bottom:0;">
+          <h2 style="font-size:16px;">Custom event window</h2>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Event date</label>
+            <input type="date" id="customDate" value="2025-09-19" min="2025-08-27" max="2025-09-30">
+          </div>
+          <div class="form-field">
+            <label>Label</label>
+            <input type="text" id="customLabel" value="Custom event">
+          </div>
+          <div class="form-field">
+            <label>Days after</label>
+            <input type="number" id="customDays" value="5" min="1" max="20">
+          </div>
+        </div>
+        <button class="primary" id="computeBtn" style="margin-top:14px;">Compute reaction →</button>
+        <div id="customResult"></div>
+      </div>
+
+      <hr class="rule">
+
+      <div class="page-head" style="margin-bottom:8px;">
+        <h2 style="font-size:16px;">Search reported price reactions</h2>
+        <p class="sub" style="margin-top:6px;">No price chart loaded for this company? Ask Claude to search financial news for how the stock actually moved around specific events — reported figures with sources, not a fabricated series.</p>
+      </div>
+      <button class="primary" id="liveReactionBtn">Search news for price reactions →</button>
+      <div class="status-line" id="liveReactionStatus"></div>
+      <div id="liveReactionResults"></div>
+
+      <div class="footnote">Price data and filing text are both real — either fetched live from SEC EDGAR and financial news via Claude's web search, or from the bundled sample / your own upload. Not investment advice.</div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+const SAMPLE = __DATA_JSON__;
+// ACTIVE is the dataset every tab reads from. Starts as the bundled real
+// AAPL 10-K, and is swapped out in place when the user uploads their own
+// filing (and optionally their own price CSV) in the Upload tab.
+let ACTIVE = JSON.parse(JSON.stringify(SAMPLE));
+
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
+
+/* ---------------- API key handling ----------------
+   Inside a Claude.ai artifact, calls to api.anthropic.com are proxied
+   automatically — no key needed. Run this same file standalone (opened
+   locally, hosted on your own server, etc.) and that proxy doesn't exist,
+   so every call needs a real key with direct-browser-access headers.
+   We don't know which mode we're in until a call actually succeeds or
+   fails, so we start optimistic and adjust the indicator based on results. */
+const apiKeyInput = document.getElementById('apiKeyInput');
+const modeIndicator = document.getElementById('modeIndicator');
+const apiKeyHint = document.getElementById('apiKeyHint');
+
+try{
+  const saved = localStorage.getItem('finrag_api_key');
+  if(saved) apiKeyInput.value = saved;
+}catch(e){ /* localStorage unavailable inside some sandboxed frames — fine, key just won't persist */ }
+
+apiKeyInput.addEventListener('change', ()=>{
+  try{ localStorage.setItem('finrag_api_key', apiKeyInput.value.trim()); }catch(e){}
+});
+
+function getApiKey(){
+  const v = apiKeyInput.value.trim();
+  return v || null;
+}
+
+function anthropicHeaders(){
+  const key = getApiKey();
+  const headers = {"Content-Type":"application/json"};
+  if(key){
+    headers["x-api-key"] = key;
+    headers["anthropic-version"] = "2023-06-01";
+    headers["anthropic-dangerous-direct-browser-access"] = "true";
+  }
+  return headers;
+}
+
+function setModeIndicator(state){
+  if(state==='ok'){
+    modeIndicator.className = 'ok';
+    modeIndicator.textContent = getApiKey() ? '● connected — using your API key' : '● connected — running inside Claude.ai';
+  }else if(state==='needs-key'){
+    modeIndicator.className = 'needs-key';
+    modeIndicator.textContent = '● needs an API key (see below)';
+  }else{
+    modeIndicator.className = '';
+    modeIndicator.textContent = '● not yet tested';
+  }
+}
+setModeIndicator('idle');
+
+function friendlyApiError(err){
+  const msg = String(err && err.message || err);
+  if(msg.includes('401') || msg.includes('403')){
+    setModeIndicator('needs-key');
+    return 'Invalid or missing API key. Paste a valid key in the sidebar (get one at console.anthropic.com) and try again.';
+  }
+  if(msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('TypeError')){
+    setModeIndicator('needs-key');
+    return "Couldn't reach the Anthropic API. If you're running this file outside Claude.ai, add your API key in the sidebar — direct calls require it. Also make sure you opened this page via a local server (http://localhost...), not by double-clicking the file.";
+  }
+  if(msg.includes('API error')){
+    setModeIndicator('needs-key');
+    return `API request failed (${msg}). If running outside Claude.ai, check your API key in the sidebar.`;
+  }
+  return 'Error: ' + msg;
+}
+
+/* ---------------- Nav ---------------- */
+document.querySelectorAll('.navlist button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.navlist button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------------- Retrieval: simple TF-IDF cosine over real chunks ---------------- */
+function tokenize(s){
+  return s.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>2);
+}
+const STOPWORDS = new Set(['the','and','for','are','can','its','with','that','this','from','has','have','will','was','were','been','their','company','item','also','not','any','all']);
+
+function buildIndex(chunks){
+  const docsTokens = chunks.map(c=>tokenize(c.text).filter(w=>!STOPWORDS.has(w)));
+  const df = {};
+  docsTokens.forEach(tokens=>{
+    new Set(tokens).forEach(t=>{ df[t]=(df[t]||0)+1; });
+  });
+  const N = docsTokens.length;
+  const idf = {};
+  Object.keys(df).forEach(t=>{ idf[t]=Math.log((N+1)/(df[t]+1))+1; });
+
+  const vectors = docsTokens.map(tokens=>{
+    const tf = {};
+    tokens.forEach(t=>{ tf[t]=(tf[t]||0)+1; });
+    const vec = {};
+    let norm = 0;
+    Object.keys(tf).forEach(t=>{
+      const w = tf[t]*(idf[t]||0);
+      vec[t]=w; norm += w*w;
+    });
+    norm = Math.sqrt(norm) || 1;
+    Object.keys(vec).forEach(t=>{ vec[t]/=norm; });
+    return vec;
+  });
+  return {idf, vectors};
+}
+
+function queryVector(q, idf){
+  const tokens = tokenize(q).filter(w=>!STOPWORDS.has(w));
+  const tf = {};
+  tokens.forEach(t=>{ tf[t]=(tf[t]||0)+1; });
+  const vec = {};
+  let norm = 0;
+  Object.keys(tf).forEach(t=>{
+    const w = tf[t]*(idf[t]||0.5);
+    vec[t]=w; norm += w*w;
+  });
+  norm = Math.sqrt(norm) || 1;
+  Object.keys(vec).forEach(t=>{ vec[t]/=norm; });
+  return vec;
+}
+
+function cosineSim(a,b){
+  let sum=0;
+  const keys = Object.keys(a).length < Object.keys(b).length ? Object.keys(a) : Object.keys(b);
+  keys.forEach(k=>{ if(a[k]&&b[k]) sum += a[k]*b[k]; });
+  return sum;
+}
+
+let INDEX = buildIndex(ACTIVE.chunks);
+
+function retrieve(question, k=5){
+  const qv = queryVector(question, INDEX.idf);
+  const scored = ACTIVE.chunks.map((c,i)=>({
+    chunk:c, score: cosineSim(qv, INDEX.vectors[i])
+  }));
+  scored.sort((a,b)=>b.score-a.score);
+  return scored.slice(0,k).filter(s=>s.score>0);
+}
+
+/* ---------------- Dataset banner + nav footer (reflect ACTIVE) ---------------- */
+function renderDatasetChrome(){
+  const label = `<b>${ACTIVE.company}</b> · ${ACTIVE.filingType} · FY${ACTIVE.fiscalYear} · ${ACTIVE.chunks.length} chunks indexed`;
+  ['ask','metrics','price'].forEach(tab=>{
+    const el = document.getElementById('banner-'+tab);
+    if(el) el.innerHTML = `<span class="left">${label}</span><button data-goto="upload">Change data</button>`;
+  });
+  document.querySelectorAll('.dataset-banner button').forEach(b=>{
+    b.addEventListener('click', ()=>document.querySelector('.navlist button[data-tab="upload"]').click());
+  });
+  document.getElementById('navFoot').innerHTML =
+    `<span class="dot">●</span> ${ACTIVE.company} · ${ACTIVE.filingType} · FY${ACTIVE.fiscalYear}<br>Source: ${ACTIVE.sourceLabel}<br>${ACTIVE.chunks.length} chunks indexed`;
+  document.getElementById('askSub').textContent =
+    `Grounded retrieval over ${ACTIVE.company}'s ${ACTIVE.filingType} (FY${ACTIVE.fiscalYear}). Every answer cites the exact section it came from.`;
+  document.getElementById('metricsTitle').textContent = `Key metrics, FY${ACTIVE.fiscalYear}`;
+  document.getElementById('priceSub').textContent =
+    ACTIVE.prices.length
+      ? `${ACTIVE.company} daily closes, ${ACTIVE.prices[0].date} – ${ACTIVE.prices[ACTIVE.prices.length-1].date}.`
+      : `No price data loaded for ${ACTIVE.company} yet — upload a CSV in the Upload tab.`;
+}
+
+/* ---------------- Ask tab ---------------- */
+const questionEl = document.getElementById('question');
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{ questionEl.value = chip.dataset.q; askQuestion(); });
+});
+document.getElementById('askBtn').addEventListener('click', askQuestion);
+questionEl.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && (e.metaKey||e.ctrlKey)) askQuestion();
+});
+
+async function askQuestion(){
+  const q = questionEl.value.trim();
+  if(!q) return;
+  const btn = document.getElementById('askBtn');
+  const answerBlock = document.getElementById('answerBlock');
+  const answerText = document.getElementById('answerText');
+  const modeTag = document.getElementById('modeTag');
+  const sourcesBlock = document.getElementById('sourcesBlock');
+
+  btn.disabled = true;
+  answerBlock.style.display = 'block';
+  modeTag.textContent = 'retrieving';
+  answerText.innerHTML = `<span class="loading">Searching ${ACTIVE.company} ${ACTIVE.filingType}</span>`;
+  sourcesBlock.innerHTML = '';
+
+  const hits = retrieve(q, 5);
+
+  if(hits.length===0){
+    answerText.textContent = 'No relevant passages found in the ingested filing for this question. Try rephrasing.';
+    modeTag.textContent = 'no match';
+    btn.disabled = false;
+    return;
+  }
+
+  const context = hits.map((h,i)=>`[${i+1}] Section: ${h.chunk.section}\n${h.chunk.text}`).join('\n\n---\n\n');
+
+  modeTag.textContent = 'generating';
+  answerText.innerHTML = '<span class="loading">Drafting grounded answer</span>';
+
+  try{
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: anthropicHeaders(),
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 900,
+        system: "You are an equity research assistant. Answer ONLY using the numbered context passages provided. Cite passages inline like [1], [2] matching the numbers given. If the context doesn't contain the answer, say so plainly. Be precise with figures and periods. Write like a concise research note, not a chatbot.",
+        messages: [{role:"user", content: `CONTEXT:\n${context}\n\nQUESTION: ${q}`}]
+      })
+    });
+    if(!resp.ok) throw new Error(`API error ${resp.status}`);
+    const data = await resp.json();
+    const textBlocks = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text);
+    let answer = textBlocks.join('\n') || 'No answer generated.';
+    answer = answer.replace(/\[(\d+)\]/g, '<span class="cite">[$1]</span>');
+    answerText.innerHTML = answer;
+    modeTag.textContent = 'generated · claude-sonnet-4-6';
+    setModeIndicator('ok');
+  }catch(err){
+    modeTag.textContent = 'generation failed — showing retrieval only';
+    const errMsg = friendlyApiError(err);
+    answerText.innerHTML = `<div style="color:var(--brick); margin-bottom:14px; font-size:13.5px;">${errMsg}</div>` +
+      hits.map((h,i)=>`<div style="margin-bottom:14px;"><span class="cite">[${i+1}]</span> ${h.chunk.text.slice(0,300)}...</div>`).join('');
+  }
+
+  sourcesBlock.innerHTML = '<h4>Sources</h4>' + hits.map((h,i)=>`
+    <div class="source-item">
+      <div class="src-head">[${i+1}] ${h.chunk.section}${h.chunk.chunk_type==='table'?' · table':''}</div>
+      <div class="src-body">${h.chunk.text.slice(0,220).replace(/</g,'&lt;')}${h.chunk.text.length>220?'…':''}</div>
+    </div>`).join('');
+
+  btn.disabled = false;
+}
+
+/* ---------------- Metrics tab ---------------- */
+function renderMetrics(){
+  const m = ACTIVE.metrics;
+  const grid = document.getElementById('metricsGrid');
+  const cells = [
+    ['Total net sales', m.total_net_sales, '$M'],
+    ['Gross margin', m.total_gross_margin_pct, '%'],
+    ['R&D expense', m.rd_expense, '$M'],
+    ['SG&A expense', m.sga_expense, '$M'],
+    ['Effective tax rate', m.effective_tax_rate, '%'],
+    ['Cash + marketable securities', m.cash_and_marketable_securities, '$M'],
+  ];
+  grid.innerHTML = cells.map(([label,val,unit])=>`
+    <div class="metric-cell">
+      <div class="label">${label}</div>
+      <div class="value">${val!=null? (unit==='%'? val.toFixed(1) : val.toLocaleString()) : '—'}<span class="unit">${val!=null?unit:''}</span></div>
+    </div>`).join('');
+
+  const barData = [
+    ['Total net sales', m.total_net_sales],
+    ['R&D expense', m.rd_expense],
+    ['SG&A expense', m.sga_expense],
+  ].filter(d=>d[1]!=null);
+  const barChartEl = document.getElementById('barChart');
+  if(barData.length===0){
+    barChartEl.innerHTML = '<div style="color:var(--ink-faint); font-size:13px; margin-top:20px;">No chartable revenue/expense figures were found in this document.</div>';
+    return;
+  }
+  const max = Math.max(...barData.map(d=>d[1]||0));
+  barChartEl.innerHTML = `<div class="label" style="font-size:11.5px;color:var(--ink-faint);margin-bottom:14px;">$ MILLIONS, FY${ACTIVE.fiscalYear}</div>` +
+    barData.map(([label,val])=>`
+      <div class="bar-row">
+        <div class="bar-label">${label}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(val/max*100).toFixed(1)}%"></div></div>
+        <div class="bar-val">$${val.toLocaleString()}M</div>
+      </div>`).join('');
+}
+
+/* ---------------- Price tab ---------------- */
+function renderPriceChart(){
+  const prices = ACTIVE.prices;
+  const svgEl = document.getElementById('priceChart');
+  if(!prices || prices.length===0){
+    svgEl.innerHTML = `<text x="20" y="110" fill="#5E6960" font-family="Inter" font-size="13">No price data loaded for ${ACTIVE.company}. Upload a CSV in the Upload tab.</text>`;
+    return;
+  }
+  const closes = prices.map(p=>p.close);
+  const min = Math.min(...closes), max = Math.max(...closes);
+  const W=700,H=220,pad=30;
+  const xStep = (W-pad*2)/(prices.length-1);
+  const yFor = c => H-pad - ((c-min)/(max-min))*(H-pad*2);
+  let path = '';
+  prices.forEach((p,i)=>{
+    const x = pad + i*xStep, y = yFor(p.close);
+    path += (i===0? 'M':'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+  });
+  const areaPath = path + `L ${pad+(prices.length-1)*xStep} ${H-pad} L ${pad} ${H-pad} Z`;
+
+  // mark the first known event, if any, on the chart
+  let marker = '';
+  if(ACTIVE.knownEvents && ACTIVE.knownEvents.length){
+    const ev = ACTIVE.knownEvents[0];
+    const idx = prices.findIndex(p=>p.date===ev.event_date);
+    if(idx>=0){
+      const x = pad + idx*xStep;
+      const shortLabel = ev.event_label.length>18 ? ev.event_label.slice(0,18)+'…' : ev.event_label;
+      marker = `<line x1="${x}" y1="${pad}" x2="${x}" y2="${H-pad}" stroke="#C9A227" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+        <text x="${x+4}" y="${pad+10}" fill="#C9A227" font-family="IBM Plex Mono" font-size="9">${shortLabel}</text>`;
+    }
+  }
+
+  svgEl.innerHTML = `
+    <rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>
+    <path d="${areaPath}" fill="url(#grad)" opacity="0.5"/>
+    <path d="${path}" fill="none" stroke="#C9A227" stroke-width="1.6"/>
+    ${marker}
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#C9A227" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#C9A227" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="${pad}" y="14" fill="#93998F" font-family="IBM Plex Mono" font-size="10">$${max.toFixed(0)}</text>
+    <text x="${pad}" y="${H-pad+14}" fill="#93998F" font-family="IBM Plex Mono" font-size="10">$${min.toFixed(0)}</text>
+  `;
+}
+
+function renderEventsTable(){
+  const tbody = document.querySelector('#eventsTable tbody');
+  const events = ACTIVE.knownEvents || [];
+  if(events.length===0){
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--ink-faint); padding:16px 0;">No built-in events for this dataset yet — use the custom event window below.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = events.map(e=>{
+    const pos = e.pct_change>=0;
+    return `<tr>
+      <td class="event-name">${e.event_label}</td>
+      <td>${e.window_start} → ${e.window_end}</td>
+      <td class="pct ${pos?'pos':'neg'}">${pos?'+':''}${e.pct_change}%</td>
+      <td class="pct">${e.max_drawdown_pct}%</td>
+      <td>${(e.peak_volume/1e6).toFixed(1)}M</td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('computeBtn').addEventListener('click', ()=>{
+  const dateStr = document.getElementById('customDate').value;
+  const label = document.getElementById('customLabel').value || 'Custom event';
+  const daysAfter = parseInt(document.getElementById('customDays').value)||5;
+
+  const resultEl = document.getElementById('customResult');
+  if(!ACTIVE.prices || ACTIVE.prices.length===0){
+    resultEl.innerHTML = `<div class="k">note</div> <div class="v">No price data loaded for ${ACTIVE.company} — upload a CSV in the Upload tab first.</div>`;
+    return;
+  }
+
+  const prices = ACTIVE.prices.map(p=>({...p, dateObj:new Date(p.date)}));
+  const eventDate = new Date(dateStr);
+  const windowStart = new Date(eventDate); windowStart.setDate(windowStart.getDate()-1);
+  const windowEnd = new Date(eventDate); windowEnd.setDate(windowEnd.getDate()+daysAfter);
+
+  const windowPrices = prices.filter(p=>p.dateObj>=windowStart && p.dateObj<=windowEnd);
+
+  if(windowPrices.length===0){
+    resultEl.innerHTML = `<div class="k">note</div> <div class="v">No price data in this window for the loaded dataset (${prices[0].date} to ${prices[prices.length-1].date}).</div>`;
+    return;
+  }
+  const startClose = windowPrices[0].close;
+  const endClose = windowPrices[windowPrices.length-1].close;
+  const pctChange = ((endClose-startClose)/startClose*100).toFixed(2);
+  let runningMax = -Infinity, maxDD = 0;
+  windowPrices.forEach(p=>{
+    runningMax = Math.max(runningMax, p.close);
+    maxDD = Math.min(maxDD, (p.close-runningMax)/runningMax*100);
+  });
+  const peakVol = Math.max(...windowPrices.map(p=>p.volume));
+
+  resultEl.innerHTML = `
+    <div><span class="k">event</span> <span class="v">${label}</span></div>
+    <div><span class="k">window</span> <span class="v">${windowPrices[0].date} → ${windowPrices[windowPrices.length-1].date}</span></div>
+    <div><span class="k">change</span> <span class="v" style="color:${pctChange>=0?'var(--sage)':'var(--brick)'}">${pctChange>=0?'+':''}${pctChange}%</span></div>
+    <div><span class="k">max drawdown</span> <span class="v">${maxDD.toFixed(2)}%</span></div>
+    <div><span class="k">peak volume</span> <span class="v">${(peakVol/1e6).toFixed(1)}M shares</span></div>
+  `;
+});
+
+/* ==================================================================
+   UPLOAD TAB — parse a user's own PDF/TXT filing (and optional price
+   CSV) entirely client-side, then swap ACTIVE to point at it.
+   ================================================================== */
+
+/* ---- 1. Text extraction ---- */
+async function extractTextFromFile(file){
+  if(file.name.toLowerCase().endsWith('.pdf')){
+    if(!window.pdfjsLib) throw new Error('PDF reader failed to load (pdf.js). Check your connection and try again, or upload a .txt file instead.');
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+    let text = '';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items.map(it=>it.str).join(' ');
+      text += `\n\n--- Page ${i} ---\n${pageText}`;
+    }
+    return text;
+  }
+  return await file.text();
+}
+
+/* ---- 2. Section-aware, paragraph-aware chunker (mirrors src/ingest.py) ---- */
+const SECTION_RE = /^\s*(Item\s+\d+[A-C]?\.?\s*[-–—]?\s*.{0,80})$/gim;
+const NUM_TOKEN_RE = /-?\$?\d[\d,]*\.?\d*%?/g;
+
+function splitIntoSections(text){
+  const matches = [...text.matchAll(SECTION_RE)];
+  if(matches.length===0) return [['Full Document', text]];
+  const sections = [];
+  for(let i=0;i<matches.length;i++){
+    const start = matches[i].index;
+    const end = i+1<matches.length ? matches[i+1].index : text.length;
+    sections.push([matches[i][1].trim(), text.slice(start,end)]);
+  }
+  return sections;
+}
+
+function chunkText(text, maxChars=1400, overlap=200){
+  const paragraphs = text.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+  const chunks = [];
+  let buf = '';
+  for(const para of paragraphs){
+    const candidate = buf ? (buf+'\n\n'+para).trim() : para;
+    if(candidate.length > maxChars && buf){
+      chunks.push(buf.trim());
+      const tail = buf.length>overlap ? buf.slice(-overlap) : buf;
+      buf = (tail+'\n\n'+para).trim();
+    } else {
+      buf = candidate;
+    }
+  }
+  if(buf.trim()) chunks.push(buf.trim());
+  return chunks;
+}
+
+// Lightweight table-line heuristic: a line with 3+ numeric tokens is
+// probably a row of a financial table (no markdown pipes to rely on
+// once text comes out of pdf.js, unlike the pre-formatted sample data).
+function looksLikeTableLine(line){
+  const nums = line.match(NUM_TOKEN_RE);
+  return nums && nums.length>=3 && line.length<200;
+}
+
+function extractHeuristicTables(sectionBody){
+  const lines = sectionBody.split('\n');
+  const tables = [];
+  let current = [];
+  for(const line of lines){
+    if(looksLikeTableLine(line)) current.push(line.trim());
+    else { if(current.length>=2) tables.push(current.join('\n')); current=[]; }
+  }
+  if(current.length>=2) tables.push(current.join('\n'));
+  return tables;
+}
+
+function chunkFilingText(rawText){
+  const chunks = [];
+  let idCounter = 0;
+  for(const [sectionName, body] of splitIntoSections(rawText)){
+    for(const tableBlock of extractHeuristicTables(body)){
+      chunks.push({id:'t'+(idCounter++), text:`[Likely table from section: ${sectionName}]\n${tableBlock}`, section:sectionName, chunk_type:'table'});
+    }
+    for(const textChunk of chunkText(body)){
+      if(textChunk.length<40) continue;
+      chunks.push({id:'c'+(idCounter++), text:textChunk, section:sectionName, chunk_type:'text'});
+    }
+  }
+  return chunks;
+}
+
+/* ---- 3. Best-effort structured metrics (generalized beyond Apple's exact phrasing) ---- */
+function cleanNum(s){
+  if(s==null) return null;
+  s = s.trim();
+  const neg = s.startsWith('(') && s.endsWith(')');
+  s = s.replace(/[()]/g,'').replace(/\$/g,'').replace(/,/g,'').replace(/%/g,'');
+  const v = parseFloat(s);
+  if(isNaN(v)) return null;
+  return neg ? -v : v;
+}
+function firstMatch(text, patterns){
+  for(const re of patterns){
+    const m = text.match(re);
+    if(m) return cleanNum(m[1]);
+  }
+  return null;
+}
+function extractMetricsFromText(text, company, fiscalYear){
+  return {
+    company, fiscal_year: fiscalYear,
+    total_net_sales: firstMatch(text, [
+      /Total net sales\s*\|?\s*\$?([\d,]+)/i,
+      /Total revenue[s]?\s*\|?\s*\$?([\d,]+)/i,
+      /Net sales\s*\|?\s*\$?([\d,]+)/i,
+    ]),
+    total_gross_margin_pct: firstMatch(text, [
+      /Total gross margin (?:percentage|%)\s*\|?\s*([\d.]+)%/i,
+      /Gross margin percentage\s*\|?\s*([\d.]+)%/i,
+    ]),
+    rd_expense: firstMatch(text, [
+      /Research and development\s*\|?\s*\$?([\d,]+)/i,
+    ]),
+    sga_expense: firstMatch(text, [
+      /Selling, general and administrative\s*\|?\s*\$?([\d,]+)/i,
+    ]),
+    effective_tax_rate: firstMatch(text, [
+      /Effective tax rate\s*\|?\s*([\d.]+)%/i,
+    ]),
+    cash_and_marketable_securities: (()=>{
+      const m = text.match(/cash.{0,50}(?:marketable securities|equivalents).{0,60}?\$?([\d.]+)\s*billion/i);
+      return m ? cleanNum(m[1])*1000 : null;
+    })(),
+  };
+}
+
+/* ---- 4. CSV price parser ---- */
+function parsePriceCsv(csvText){
+  const lines = csvText.trim().split('\n').filter(Boolean);
+  const header = lines[0].toLowerCase().split(',').map(h=>h.trim());
+  const idx = {
+    date: header.indexOf('date'), open: header.indexOf('open'), high: header.indexOf('high'),
+    low: header.indexOf('low'), close: header.indexOf('close'), volume: header.indexOf('volume'),
+  };
+  if(idx.date===-1 || idx.close===-1) throw new Error('CSV must have at least "date" and "close" columns.');
+  const rows = lines.slice(1).map(line=>{
+    const cells = line.split(',');
+    return {
+      date: cells[idx.date].trim(),
+      open: parseFloat(cells[idx.open]) || null,
+      high: parseFloat(cells[idx.high]) || null,
+      low: parseFloat(cells[idx.low]) || null,
+      close: parseFloat(cells[idx.close]),
+      volume: idx.volume>-1 ? (parseInt(cells[idx.volume])||0) : 0,
+    };
+  }).filter(r=>r.date && !isNaN(r.close));
+  rows.sort((a,b)=>a.date.localeCompare(b.date));
+  return rows;
+}
+
+/* ---- 5. Live search (Claude + web_search tool, called from the browser) ---- */
+function extractJsonFromClaudeResponse(data){
+  const textBlocks = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text);
+  let raw = textBlocks.join('\n').trim();
+  raw = raw.replace(/```json/gi,'').replace(/```/g,'').trim();
+  // Fall back to the widest {...} span in case the model added any preamble.
+  const first = raw.indexOf('{');
+  const last = raw.lastIndexOf('}');
+  if(first>=0 && last>first) raw = raw.slice(first, last+1);
+  return JSON.parse(raw);
+}
+
+async function callClaudeWithWebSearch(system, userContent, maxTokens=4000){
+  const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: anthropicHeaders(),
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: maxTokens,
+      system,
+      messages: [{role:"user", content: userContent}],
+      tools: [{type:"web_search_20250305", name:"web_search"}],
+    })
+  });
+  if(!resp.ok) throw new Error(`API error ${resp.status}`);
+  setModeIndicator('ok');
+  return await resp.json();
+}
+
+const LIVE_FILING_SYSTEM = `You are a research assistant that finds real SEC filings via web search and \
+extracts their content faithfully. Search SEC EDGAR (sec.gov) for the specific company and filing \
+requested. Read the actual filing content from search results before answering.
+
+Respond with ONLY a single JSON object, no prose before or after, no markdown fences, matching exactly:
+{
+  "found": boolean,
+  "companyName": string,
+  "ticker": string,
+  "filingType": string,
+  "fiscalPeriod": string,
+  "filingDate": string or null,
+  "sourceUrl": string or null,
+  "sections": [ {"name": string, "text": string} ],
+  "metrics": {
+    "total_net_sales": number or null,
+    "total_gross_margin_pct": number or null,
+    "rd_expense": number or null,
+    "sga_expense": number or null,
+    "effective_tax_rate": number or null,
+    "cash_and_marketable_securities": number or null
+  },
+  "notFoundReason": string or null
+}
+
+Rules:
+- "sections" should include Business, Risk Factors, Legal Proceedings, and MD&A/financial results, each \
+as a faithful paraphrase (not verbatim copy) preserving real facts, figures and dates, roughly 150-500 words each.
+- All "metrics" values are in $ millions except percentages. If you cannot confirm a number from what you \
+actually read, set it to null — NEVER estimate, guess, or fabricate a figure.
+- If you cannot find this specific filing, set "found": false and explain briefly in "notFoundReason", \
+leaving other fields empty/null.
+- Output raw JSON only.`;
+
+async function liveSearchFiling(){
+  const statusEl = document.getElementById('liveStatus');
+  const previewEl = document.getElementById('liveSectionPreview');
+  const btn = document.getElementById('liveSearchBtn');
+  const company = document.getElementById('liveCompany').value.trim();
+  const filingType = document.getElementById('liveFilingType').value;
+  const fiscalYear = document.getElementById('liveFiscalYear').value.trim();
+
+  if(!company){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = 'Enter a company name or ticker first.';
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.className = 'status-line';
+  statusEl.textContent = 'Searching SEC EDGAR and reading the filing (this can take 15–30s)...';
+  previewEl.innerHTML = '';
+
+  try{
+    const userContent = `Find the ${filingType} filed by ${company}${fiscalYear ? ' for fiscal period '+fiscalYear : ' (most recent available)'}. It should be sourced from sec.gov (SEC EDGAR). Extract its content per the schema.`;
+    const data = await callClaudeWithWebSearch(LIVE_FILING_SYSTEM, userContent);
+    const parsed = extractJsonFromClaudeResponse(data);
+
+    if(!parsed.found){
+      statusEl.className = 'status-line err';
+      statusEl.textContent = 'Not found: ' + (parsed.notFoundReason || 'Could not locate this filing.');
+      return;
+    }
+
+    // Turn the returned sections into retrieval chunks the same way local ingestion does.
+    const chunks = [];
+    let idCounter = 0;
+    (parsed.sections||[]).forEach(sec=>{
+      for(const textChunk of chunkText(sec.text||'', 1200, 150)){
+        if(textChunk.length<30) continue;
+        chunks.push({id:'l'+(idCounter++), text:textChunk, section:sec.name, chunk_type:'text'});
+      }
+    });
+    if(chunks.length===0) throw new Error('The filing was found but no readable section text came back — try a more specific fiscal period.');
+
+    const m = parsed.metrics || {};
+    ACTIVE = {
+      company: parsed.ticker || parsed.companyName || company.toUpperCase(),
+      filingType: parsed.filingType || filingType,
+      fiscalYear: parsed.fiscalPeriod || fiscalYear || '—',
+      sourceLabel: parsed.sourceUrl
+        ? `Live web search · <a href="${parsed.sourceUrl}" target="_blank" rel="noopener">source ↗</a>`
+        : 'Live web search via Claude',
+      chunks,
+      metrics: {
+        company: parsed.companyName, fiscal_year: parsed.fiscalPeriod,
+        total_net_sales: m.total_net_sales ?? null,
+        total_gross_margin_pct: m.total_gross_margin_pct ?? null,
+        rd_expense: m.rd_expense ?? null,
+        sga_expense: m.sga_expense ?? null,
+        effective_tax_rate: m.effective_tax_rate ?? null,
+        cash_and_marketable_securities: m.cash_and_marketable_securities ?? null,
+      },
+      prices: [],
+      knownEvents: [],
+    };
+
+    const sections = [...new Set(chunks.map(c=>c.section))];
+    statusEl.className = 'status-line ok';
+    statusEl.textContent = `Found ${parsed.companyName} ${parsed.filingType} (${parsed.filingDate||'date n/a'}). Indexed ${chunks.length} chunks across ${sections.length} sections.`;
+    previewEl.innerHTML = sections.map(s=>`<span class="stag">${s}</span>`).join('');
+
+    refreshUI();
+    document.querySelector('.navlist button[data-tab="ask"]').click();
+  }catch(err){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = friendlyApiError(err);
+  }finally{
+    btn.disabled = false;
+  }
+}
+document.getElementById('liveSearchBtn').addEventListener('click', liveSearchFiling);
+
+const LIVE_REACTION_SYSTEM = `You are a research assistant. Search financial news for how a specific \
+stock actually reacted (price moves reported by real news outlets) around notable disclosed events for \
+the given company — earnings, product launches, legal rulings, regulatory actions, guidance changes — in \
+roughly the last 12 months.
+
+Respond with ONLY a JSON object, no prose, no markdown fences:
+{
+  "found": boolean,
+  "reactions": [
+    {"date": string, "description": string, "reportedMove": string or null, "sourceUrl": string or null, "sourceName": string or null}
+  ],
+  "notFoundReason": string or null
+}
+
+Rules:
+- "reportedMove" must be a figure you actually saw reported (e.g. "-3.2%", "+5% intraday") — if no specific \
+percentage was reported, set it to null and describe qualitatively in "description" instead.
+- Never invent a percentage. Include a sourceUrl for each reaction when available.
+- Return at most 6 reactions, most recent first.`;
+
+async function liveSearchReactions(){
+  const statusEl = document.getElementById('liveReactionStatus');
+  const resultsEl = document.getElementById('liveReactionResults');
+  const btn = document.getElementById('liveReactionBtn');
+
+  btn.disabled = true;
+  statusEl.className = 'status-line';
+  statusEl.textContent = `Searching financial news for ${ACTIVE.company} price reactions...`;
+  resultsEl.innerHTML = '';
+
+  try{
+    const userContent = `Find real reported stock price reactions for ${ACTIVE.company} (${ACTIVE.filingType} filer) around its disclosed events in the past 12 months.`;
+    const data = await callClaudeWithWebSearch(LIVE_REACTION_SYSTEM, userContent, 2000);
+    const parsed = extractJsonFromClaudeResponse(data);
+
+    if(!parsed.found || !(parsed.reactions||[]).length){
+      statusEl.className = 'status-line err';
+      statusEl.textContent = 'No reported reactions found: ' + (parsed.notFoundReason || 'try a different company.');
+      return;
+    }
+
+    statusEl.className = 'status-line ok';
+    statusEl.textContent = `Found ${parsed.reactions.length} reported reaction${parsed.reactions.length>1?'s':''}.`;
+    resultsEl.innerHTML = parsed.reactions.map(r=>`
+      <div class="reaction-card">
+        <div class="r-date">${r.date}${r.reportedMove ? ' · '+r.reportedMove : ''}</div>
+        <div class="r-desc">${r.description}</div>
+        ${r.sourceUrl ? `<div class="r-src">via <a href="${r.sourceUrl}" target="_blank" rel="noopener">${r.sourceName||'source'}</a></div>` : ''}
+      </div>`).join('');
+  }catch(err){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = friendlyApiError(err);
+  }finally{
+    btn.disabled = false;
+  }
+}
+document.getElementById('liveReactionBtn').addEventListener('click', liveSearchReactions);
+
+/* ---- 6. Wire up Upload tab UI (file-based path) ---- */
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const csvDropZone = document.getElementById('csvDropZone');
+const csvInput = document.getElementById('csvInput');
+let pendingFile = null;
+let pendingCsvRows = null;
+
+function setupDropZone(zone, input, onFile){
+  zone.addEventListener('click', ()=>input.click());
+  input.addEventListener('change', ()=>{ if(input.files[0]) onFile(input.files[0]); });
+  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('dragover');
+    if(e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+  });
+}
+
+setupDropZone(dropZone, fileInput, (file)=>{
+  pendingFile = file;
+  dropZone.querySelector('.main-txt').textContent = file.name;
+  dropZone.querySelector('.sub-txt').textContent = `${(file.size/1024).toFixed(0)} KB — ready to process`;
+  const guess = file.name.split(/[._-]/)[0].toUpperCase();
+  if(guess && !document.getElementById('metaCompany').value) document.getElementById('metaCompany').value = guess;
+});
+
+setupDropZone(csvDropZone, csvInput, async (file)=>{
+  const statusEl = document.getElementById('csvStatus');
+  try{
+    const text = await file.text();
+    pendingCsvRows = parsePriceCsv(text);
+    statusEl.className = 'status-line ok';
+    statusEl.textContent = `Loaded ${pendingCsvRows.length} price rows (${pendingCsvRows[0].date} → ${pendingCsvRows[pendingCsvRows.length-1].date}). Applying to ${ACTIVE.company}...`;
+    ACTIVE.prices = pendingCsvRows;
+    ACTIVE.knownEvents = []; // no auto-detected events for user-supplied price data
+    const dateInput = document.getElementById('customDate');
+    dateInput.min = pendingCsvRows[0].date; dateInput.max = pendingCsvRows[pendingCsvRows.length-1].date;
+    refreshUI();
+  }catch(err){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = 'Error: ' + err.message;
+  }
+});
+
+document.getElementById('processBtn').addEventListener('click', async ()=>{
+  const statusEl = document.getElementById('uploadStatus');
+  const previewEl = document.getElementById('sectionPreview');
+  const btn = document.getElementById('processBtn');
+  if(!pendingFile){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = 'Choose a file first.';
+    return;
+  }
+  const company = document.getElementById('metaCompany').value.trim() || 'UNKNOWN';
+  const filingType = document.getElementById('metaFilingType').value.trim() || 'Filing';
+  const fiscalYear = document.getElementById('metaFiscalYear').value.trim() || '—';
+
+  btn.disabled = true;
+  statusEl.className = 'status-line';
+  statusEl.textContent = 'Extracting text...';
+  previewEl.innerHTML = '';
+
+  try{
+    const rawText = await extractTextFromFile(pendingFile);
+    if(rawText.trim().length < 100) throw new Error('Almost no text could be extracted — this PDF may be scanned images rather than selectable text.');
+
+    statusEl.textContent = 'Chunking and indexing...';
+    const chunks = chunkFilingText(rawText);
+    const metrics = extractMetricsFromText(rawText, company, fiscalYear);
+
+    ACTIVE = {
+      company, filingType, fiscalYear,
+      sourceLabel: `Uploaded file: ${pendingFile.name}`,
+      chunks, metrics,
+      prices: ACTIVE.company===company ? ACTIVE.prices : [],
+      knownEvents: ACTIVE.company===company ? ACTIVE.knownEvents : [],
+    };
+
+    const tableCount = chunks.filter(c=>c.chunk_type==='table').length;
+    const sections = [...new Set(chunks.map(c=>c.section))];
+
+    statusEl.className = 'status-line ok';
+    statusEl.textContent = `Indexed ${chunks.length} chunks (${tableCount} likely tables) across ${sections.length} sections. Switch to "Ask the Filing" to query it.`;
+    previewEl.innerHTML = sections.slice(0,20).map(s=>`<span class="stag">${s.length>40?s.slice(0,40)+'…':s}</span>`).join('');
+
+    refreshUI();
+    document.querySelector('.navlist button[data-tab="ask"]').click();
+  }catch(err){
+    statusEl.className = 'status-line err';
+    statusEl.textContent = 'Error: ' + err.message;
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  ACTIVE = JSON.parse(JSON.stringify(SAMPLE));
+  pendingFile = null; pendingCsvRows = null;
+  document.getElementById('metaCompany').value = '';
+  document.getElementById('metaFilingType').value = '10-K';
+  document.getElementById('metaFiscalYear').value = '';
+  dropZone.querySelector('.main-txt').textContent = 'Click to choose a file, or drag one here';
+  dropZone.querySelector('.sub-txt').textContent = '.pdf or .txt — 10-K, 10-Q, 8-K, or earnings call transcript';
+  document.getElementById('uploadStatus').textContent = '';
+  document.getElementById('uploadStatus').className = 'status-line';
+  document.getElementById('sectionPreview').innerHTML = '';
+  document.getElementById('csvStatus').textContent = '';
+  document.getElementById('csvStatus').className = 'status-line';
+  document.getElementById('liveCompany').value = '';
+  document.getElementById('liveFiscalYear').value = '';
+  document.getElementById('liveStatus').textContent = '';
+  document.getElementById('liveStatus').className = 'status-line';
+  document.getElementById('liveSectionPreview').innerHTML = '';
+  document.getElementById('liveReactionStatus').textContent = '';
+  document.getElementById('liveReactionStatus').className = 'status-line';
+  document.getElementById('liveReactionResults').innerHTML = '';
+  document.getElementById('customDate').min = '2025-08-27';
+  document.getElementById('customDate').max = '2025-09-30';
+  document.getElementById('customDate').value = '2025-09-19';
+  refreshUI();
+});
+
+/* ---- 6. Central refresh: rebuild index + re-render every tab ---- */
+function refreshUI(){
+  INDEX = buildIndex(ACTIVE.chunks);
+  renderDatasetChrome();
+  renderMetrics();
+  renderPriceChart();
+  renderEventsTable();
+  document.getElementById('answerBlock').style.display = 'none';
+  document.getElementById('liveReactionResults').innerHTML = '';
+  document.getElementById('liveReactionStatus').textContent = '';
+  document.getElementById('liveReactionStatus').className = 'status-line';
+}
+
+refreshUI();
+</script>
+</body>
+</html>
