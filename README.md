@@ -2,7 +2,6 @@
 
 **An equity-research RAG system for SEC 10-K / 10-Q filings and earnings calls** — grounded retrieval with citations, structured financial metric extraction, and a module that links qualitative risk disclosures to real historical stock price reactions.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](requirements.txt)
 [![Built with Claude](https://img.shields.io/badge/LLM-Claude-6b5bd2)](https://www.anthropic.com)
 
