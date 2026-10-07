@@ -5,7 +5,7 @@ Thanks for considering a contribution — this is a small demonstration project,
 ## Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git clone https://github.com/python02-hub/financial-RAG-copilot.git
 cd YOUR_REPO
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
