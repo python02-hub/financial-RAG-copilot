@@ -6,7 +6,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](requirements.txt)
 [![Built with Claude](https://img.shields.io/badge/LLM-Claude-6b5bd2)](https://www.anthropic.com)
 
-**[→ Live demo (GitHub Pages)](https://YOUR_USERNAME.github.io/YOUR_REPO/)** — replace with your own link after enabling Pages (see [Deploying the web demo](#deploying-the-web-demo)).
+**[→ Live demo (GitHub Pages)](https://python02-hub.github.io/financial-RAG-copilot/)** — replace with your own link after enabling Pages (see [Deploying the web demo](#deploying-the-web-demo)).
 
 ---
 
